@@ -12,6 +12,8 @@ importers:
       eslint-plugin-import: ^2.28.1
       eslint-plugin-react: ^7.33.2
       eslint-plugin-react-hooks: ^4.6.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
       rollup: ^3.28.0
       typescript: ^5.1.6
     devDependencies:
@@ -23,6 +25,8 @@ importers:
       eslint-plugin-import: registry.npmmirror.com/eslint-plugin-import/2.28.1_eslint@8.47.0
       eslint-plugin-react: registry.npmmirror.com/eslint-plugin-react/7.33.2_eslint@8.47.0
       eslint-plugin-react-hooks: registry.npmmirror.com/eslint-plugin-react-hooks/4.6.0_eslint@8.47.0
+      react: registry.npmmirror.com/react/18.2.0
+      react-dom: registry.npmmirror.com/react-dom/18.2.0_react@18.2.0
       rollup: registry.npmmirror.com/rollup/3.28.0
       typescript: registry.npmmirror.com/typescript/5.1.6
 
@@ -2403,7 +2407,6 @@ packages:
       loose-envify: registry.npmmirror.com/loose-envify/1.4.0
       react: registry.npmmirror.com/react/18.2.0
       scheduler: registry.npmmirror.com/scheduler/0.23.0
-    dev: false
 
   registry.npmmirror.com/react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/react-is/-/react-is-16.13.1.tgz}
@@ -2423,7 +2426,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: registry.npmmirror.com/loose-envify/1.4.0
-    dev: false
 
   registry.npmmirror.com/reflect.getprototypeof/1.0.3:
     resolution: {integrity: sha512-TTAOZpkJ2YLxl7mVHWrNo3iDMEkYlva/kgFcXndqMgbo/AZUmmavEkdXV+hXtE4P8xdyEKRzalaFqZVuwIk/Nw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/reflect.getprototypeof/-/reflect.getprototypeof-1.0.3.tgz}
@@ -2559,7 +2561,6 @@ packages:
     version: 0.23.0
     dependencies:
       loose-envify: registry.npmmirror.com/loose-envify/1.4.0
-    dev: false
 
   registry.npmmirror.com/screenfull/5.2.0:
     resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/screenfull/-/screenfull-5.2.0.tgz}
