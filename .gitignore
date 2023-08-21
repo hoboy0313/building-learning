@@ -9,6 +9,8 @@
 node_modules
 yarn.lock
 
+.pnpm-store
+
 # jest
 coverage
 
