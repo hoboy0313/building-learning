@@ -24,3 +24,8 @@ locale.json
 
 #dev
 demo.js
+
+# dist
+**/es/**
+**/lib/**
+**/dist/**

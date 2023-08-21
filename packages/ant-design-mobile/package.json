@@ -6,6 +6,7 @@
     "build:gulp:button": "gulp build-button"
   },
   "dependencies": {
+    "@babel/runtime": "^7.22.10",
     "@floating-ui/dom": "^1.4.2",
     "@rc-component/mini-decimal": "^1.1.0",
     "@react-spring/web": "~9.6.1",

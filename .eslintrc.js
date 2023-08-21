@@ -54,7 +54,11 @@ module.exports = {
     ignorePatterns: [
         'node_modules',
         '**/lib/**/*.ts',
+        '**/lib/**/*.tsx',
+        '**/es/**/*.ts',
         '**/es/**/*.tsx',
+        '**/lib/**/*.js',
+        '**/es/**/*.js',
         '*.json',
     ],
 };
