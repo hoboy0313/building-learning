@@ -69,6 +69,7 @@ module.exports = {
         '**/es/**/*.tsx',
         '**/lib/**/*.js',
         '**/es/**/*.js',
+        '**/dist/**/*.js',
         '*.json',
         'demos/**/*.*',
     ],
