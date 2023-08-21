@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <style>
+            :root {
+                --bg-color: orange;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="width: 200px; height: 100px; background-color: var(--bg-color, black);"></div>
+        <br />
+        <div id="shadow-dom">
+            shadow-dom 中需要 :root 不生效，需要换成 :host
+        </div>
+        <script>
+            const shadowElement = document.querySelector('#shadow-dom');
+            shadowElement.attachShadow({mode: 'open'});
+            const container = document.createElement('div');
+            const containerStyle = document.createElement('style');
+            containerStyle.textContent = ':root {--bg-color: red;}';
+            container.setAttribute('style', 'width: 200px; height: 100px; background-color: var(--bg-color, black)');
+
+            shadowElement.shadowRoot.appendChild(containerStyle);
+            shadowElement.shadowRoot.appendChild(container);
+        </script>
+    </body>
+</html>

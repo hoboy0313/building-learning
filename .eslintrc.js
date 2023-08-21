@@ -5,6 +5,15 @@ module.exports = {
         '@ecomfe/eslint-config/import/strict',
         '@ecomfe/eslint-config/react/strict',
     ],
+
+    parserOptions: {
+        babelOptions: {
+            plugins: [
+                '@babel/plugin-syntax-import-assertions',
+            ],
+        },
+    },
+
     rules: {
         '@typescript-eslint/no-floating-promises': 'off',
         'consistent-return': 'off',
@@ -12,6 +21,7 @@ module.exports = {
         'import/no-unresolved': 'off',
         'import/no-extraneous-dependencies': 'off',
         'import/no-named-as-default': 'off',
+        'no-param-reassign': 'off',
         'import/extensions': [
             'error',
             'never',
@@ -60,5 +70,6 @@ module.exports = {
         '**/lib/**/*.js',
         '**/es/**/*.js',
         '*.json',
+        'demos/**/*.*',
     ],
 };

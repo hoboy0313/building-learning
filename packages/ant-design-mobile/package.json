@@ -2,8 +2,10 @@
   "name": "antd-mobile",
   "version": "5.32.0",
   "scripts": {
-    "build": "gulp",
-    "build:gulp:button": "gulp build-button"
+    "compile": "pnpm clean && gulp compile",
+    "clean": "rimraf es lib",
+    "build:gulp:button": "gulp build-button",
+    "build:gulp:style": "gulp build-root-to-host"
   },
   "dependencies": {
     "@babel/runtime": "^7.22.10",

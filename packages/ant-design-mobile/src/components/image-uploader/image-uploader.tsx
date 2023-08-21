@@ -265,7 +265,7 @@ export const ImageUploader: FC<ImageUploaderProps> = p => {
           onDelete={async () => {
             const canDelete = await props.onDelete?.(fileItem)
             if (canDelete === false) return
-            setValue(value.filter((x, i) => i !== index))
+            setValue(value.filter((_, i) => i !== index))
           }}
         />
       )
