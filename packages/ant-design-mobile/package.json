@@ -3,12 +3,7 @@
   "version": "5.32.0",
   "scripts": {
     "build": "gulp",
-    "lint": "eslint .",
-    "postinstall": "husky install",
-    "package-diff": "antd-tools run package-diff --path=./lib",
-    "pub": "npm run package-diff && npm publish ./lib",
-    "pub:alpha": "npm publish ./lib --tag alpha",
-    "pub:dev": "npm publish ./lib --tag dev"
+    "build:gulp:button": "gulp build-button"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.4.2",
