@@ -2,7 +2,7 @@
   "name": "antd-mobile",
   "version": "5.32.0",
   "scripts": {
-    "compile": "pnpm clean && gulp compile",
+    "compile": "gulp compile",
     "clean": "rimraf es lib",
     "build:gulp:button": "gulp build-button",
     "build:gulp:style": "gulp build-root-to-host"

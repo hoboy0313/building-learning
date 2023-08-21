@@ -6,6 +6,16 @@ import postcss from 'gulp-postcss';
 import merge2 from 'merge2';
 import ts from 'gulp-typescript';
 
+import webpack from 'webpack';
+import webpackStream from 'webpack-stream';
+
+import rollupStream from '@rollup/stream';
+import {nodeResolve} from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
+import babelRollup from '@rollup/plugin-babel';
+import postcssRollup from 'rollup-plugin-postcss';
+import source from 'vinyl-source-stream';
+
 import transformless2css from './build/babel-transform-less-to-css.mjs';
 import postcssReplaceRootToHost from './build/postcss-replace-root-to-host.mjs';
 
@@ -22,7 +32,7 @@ const esDir = path.resolve(dirname, 'es');
 const cjsDir = path.resolve(dirname, 'lib');
 
 function compile(modules) {
-    const isES = modules === false;
+    const isES = modules !== false;
     const dir = isES ? esDir : cjsDir;
 
     let error = 0;
@@ -35,8 +45,14 @@ function compile(modules) {
             babel({
                 presets: [
                     '@babel/preset-react',
+                    '@babel/preset-typescript',
                     ['@babel/preset-env', {
                         modules: isES ? false : 'cjs',
+                        loose: true,
+                        targets: {
+                            'chrome': '49',
+                            'ios': '9',
+                        },
                     }],
                 ],
                 plugins: [
@@ -46,9 +62,6 @@ function compile(modules) {
                             version: '^7.22.10',
                         },
                     ],
-                    ['@babel/plugin-transform-typescript', {
-                        isTSX: true,
-                    }],
                     transformless2css(),
                 ],
             })
@@ -110,10 +123,164 @@ gulp.task('compile-es', () => compile());
 
 gulp.task('compile-cjs', () => compile(false));
 
+gulp.task('compile-umd-by-webpack', () => {
+    return gulp
+        .src('es/index.js')
+        .pipe(
+            webpackStream(
+                {
+                    output: {
+                        filename: 'antd-mobile.js',
+                        library: {
+                            type: 'umd',
+                            name: 'antdMobile',
+                        },
+                    },
+                    mode: 'production',
+                    optimization: {
+                        usedExports: true,
+                    },
+                    performance: {
+                        hints: false,
+                    },
+                    resolve: {
+                        extensions: ['.js', '.json'],
+                    },
+                    module: {
+                        rules: [
+                            {
+                                test: /\.m?js$/,
+                                use: {
+                                    loader: 'babel-loader',
+                                    options: {
+                                        'presets': [
+                                            [
+                                                '@babel/preset-env',
+                                                {
+                                                    'loose': true,
+                                                    'modules': false,
+                                                    'targets': {
+                                                        'chrome': '49',
+                                                        'ios': '9',
+                                                    },
+                                                },
+                                            ],
+                                            '@babel/preset-typescript',
+                                            '@babel/preset-react',
+                                        ],
+                                    },
+                                },
+                            },
+                            {
+                                test: /\.(png|svg|jpg|gif|jpeg)$/,
+                                type: 'asset/inline',
+                            },
+                            {
+                                test: /\.css$/i,
+                                use: ['style-loader', 'css-loader'],
+                            },
+                        ],
+                    },
+                    externals: [
+                        {
+                            react: {
+                                commonjs: 'react',
+                                commonjs2: 'react',
+                                amd: 'react',
+                                root: 'React',
+                            },
+                            'react-dom': {
+                                commonjs: 'react-dom',
+                                commonjs2: 'react-dom',
+                                amd: 'react-dom',
+                                root: 'ReactDOM',
+                            },
+                        },
+                    ],
+                },
+                webpack
+            )
+        ).pipe(
+            gulp.dest('dist')
+        );
+});
+
+gulp.task('compile-umd-by-rollup', () => {
+    return rollupStream({
+        input: 'es/index.js',
+        output: {
+            file: 'antd-mobile.js',
+            format: 'umd',
+            name: 'antdMobile',
+            globals: {
+                react: 'React',
+                'react-dom': 'ReactDOM',
+            },
+        },
+        external: ['react', 'react-dom'],
+        plugins: [
+            nodeResolve(),
+            terser(),
+            babelRollup({
+                babelHelpers: 'bundled',
+                presets: [
+                    [
+                        '@babel/preset-env',
+                        {
+                            'loose': true,
+                            'modules': false,
+                            'targets': {
+                                'chrome': '49',
+                                'ios': '9',
+                            },
+                        },
+                    ],
+                    '@babel/preset-typescript',
+                    '@babel/preset-react',
+                ],
+                exclude: 'node_modules/**',
+                extensions: ['tsx', 'ts', 'js', 'jsx'],
+            }),
+            postcssRollup({
+                plugins: [
+                    postcssReplaceRootToHost(), // 演示专用，组件库中无需使用。
+                ],
+                syntax: 'less',
+                extensions: ['css', 'less'],
+            }),
+        ],
+    })
+        // .pipe(source('antd-mobile.js'))
+        .pipe(
+            gulp.dest('dist-rollup')
+        );
+});
+
 gulp.task(
     'compile',
-    gulp.parallel(
-        'compile-es',
-        'compile-cjs'
+    gulp.series(
+        // 'compile-es'
+        'compile-umd-by-rollup'
+        // gulp.parallel(
+        //     'compile-es',
+        //     'compile-cjs'
+        // ),
+        // gulp.parallel(
+        // 'compile-umd-by-webpack',
+        // 'compile-umd-by-rollup'
+        // )
     )
 );
+// gulp.task(
+//     'compile',
+//     gulp.series(
+//         gulp.parallel(
+//             'compile-es',
+//             'compile-cjs'
+//         ),
+//         gulp.parallel(
+//             'compile-umd-by-webpack',
+//             'compile-umd-by-rollup'
+//         )
+//     )
+// );
