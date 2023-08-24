@@ -97,7 +97,7 @@ gulp.task('compile-umd-by-rollup', () => {
     return rollupStream({
         input: 'src/index.js',
         output: {
-            file: 'dayjs.webpack.js',
+            file: 'dayjs.rollup.js',
             format: 'umd',
             name: 'dayjs',
             globals: {
