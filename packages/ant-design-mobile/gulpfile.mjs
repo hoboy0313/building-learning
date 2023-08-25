@@ -201,7 +201,8 @@ gulp.task('compile-umd-by-webpack', () => {
                 },
                 webpack
             )
-        ).pipe(
+        )
+        .pipe(
             gulp.dest('dist')
         );
 });

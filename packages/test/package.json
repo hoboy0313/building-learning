@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:component": "rollup -c rollup.build-component.mjs"
+    "build:component": "rollup -c rollup.build-component.mjs",
+    "build:esbuild": "node esbuild-build.mjs"
   },
   "keywords": [],
   "author": "",
