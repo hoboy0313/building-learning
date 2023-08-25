@@ -28,4 +28,5 @@ demo.js
 # dist
 **/es/**
 **/lib/**
+**/cjs/**
 **/dist/**

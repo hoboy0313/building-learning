@@ -1,15 +1,27 @@
+import path from 'node:path';
 import gulp from 'gulp';
+import babel from 'gulp-babel';
+import terser from 'gulp-terser';
+import merge2 from 'merge2';
 
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
 
 import rollupStream from '@rollup/stream';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
-import terser from '@rollup/plugin-terser';
+import terserRollup from '@rollup/plugin-terser';
 import babelRollup from '@rollup/plugin-babel';
 import postcssRollup from 'rollup-plugin-postcss';
 import commonjs from '@rollup/plugin-commonjs';
 import source from 'vinyl-source-stream';
+
+function resolvePath(dirname) {
+    const prevDirname = path.resolve(dirname, '..');
+    return {
+        dirname: prevDirname,
+        filename: path.relative(prevDirname, dirname),
+    };
+}
 
 gulp.task('compile-umd-by-webpack', () => {
     return gulp
@@ -109,7 +121,7 @@ gulp.task('compile-umd-by-rollup', () => {
         plugins: [
             nodeResolve(),
             commonjs(),
-            terser(),
+            terserRollup(),
             babelRollup({
                 babelHelpers: 'bundled',
                 presets: [
@@ -139,12 +151,51 @@ gulp.task('compile-umd-by-rollup', () => {
         );
 });
 
+gulp.task('compile-plugin-with-locale', () => {
+    // const pluginCompile = gulp.src([
+    //     'src/plugin/**/*.js',
+    // ])
+    //     .pipe(
+    //         babel({
+    //             plugins: [
+    //                 '@babel/plugin-transform-modules-umd',
+    //             ],
+    //         })
+    //     )
+    //     .pipe(terser())
+    //     .pipe(gulp.dest(file => {
+    //         const {dirname, filename} = resolvePath(file.dirname);
+    //         file.basename = `${filename}.js`;
+    //         file.dirname = dirname;
+    //         return 'plugin';
+    //     }));
+
+    const localeCompile = gulp.src([
+        'src/locale/*.js',
+    ])
+        .pipe(
+            babel({
+                plugins: [
+                    '@babel/plugin-transform-modules-umd',
+                ],
+            })
+        )
+        .pipe(terser())
+        .pipe(gulp.dest('locale'));
+
+    return merge2([
+        // pluginCompile,
+        localeCompile,
+    ]);
+});
+
 gulp.task(
     'compile',
     gulp.series(
-        gulp.parallel(
-            'compile-umd-by-webpack',
-            'compile-umd-by-rollup'
-        )
+        'compile-plugin-with-locale'
+        // gulp.parallel(
+        //     'compile-umd-by-webpack',
+        //     'compile-umd-by-rollup'
+        // )
     )
 );

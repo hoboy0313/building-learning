@@ -1,0 +1,5 @@
+plugin/**
+locale/**
+
+dayjs.min.js
+index.d.ts
