@@ -152,23 +152,23 @@ gulp.task('compile-umd-by-rollup', () => {
 });
 
 gulp.task('compile-plugin-with-locale', () => {
-    // const pluginCompile = gulp.src([
-    //     'src/plugin/**/*.js',
-    // ])
-    //     .pipe(
-    //         babel({
-    //             plugins: [
-    //                 '@babel/plugin-transform-modules-umd',
-    //             ],
-    //         })
-    //     )
-    //     .pipe(terser())
-    //     .pipe(gulp.dest(file => {
-    //         const {dirname, filename} = resolvePath(file.dirname);
-    //         file.basename = `${filename}.js`;
-    //         file.dirname = dirname;
-    //         return 'plugin';
-    //     }));
+    const pluginCompile = gulp.src([
+        'src/plugin/**/*.js',
+    ])
+        .pipe(
+            babel({
+                plugins: [
+                    '@babel/plugin-transform-modules-umd',
+                ],
+            })
+        )
+        .pipe(terser())
+        .pipe(gulp.dest(file => {
+            const {dirname, filename} = resolvePath(file.dirname);
+            file.basename = `${filename}.js`;
+            file.dirname = dirname;
+            return 'plugin';
+        }));
 
     const localeCompile = gulp.src([
         'src/locale/*.js',
@@ -183,19 +183,34 @@ gulp.task('compile-plugin-with-locale', () => {
         .pipe(terser())
         .pipe(gulp.dest('locale'));
 
+    const copyPluginDts = gulp
+        .src('types/plugin/*.d.ts')
+        .pipe(gulp.dest('plugin'));
+
+    const copylocaleDts = gulp
+        .src('types/locale/*.d.ts')
+        .pipe(gulp.dest('locale'));
+
+    const copyIndexDts = gulp
+        .src('types/index.d.ts')
+        .pipe(gulp.dest('.'));
+
     return merge2([
-        // pluginCompile,
+        pluginCompile,
         localeCompile,
+        copyPluginDts,
+        copylocaleDts,
+        copyIndexDts,
     ]);
 });
 
 gulp.task(
     'compile',
     gulp.series(
+        gulp.parallel(
+            'compile-umd-by-webpack',
+            'compile-umd-by-rollup'
+        ),
         'compile-plugin-with-locale'
-        // gulp.parallel(
-        //     'compile-umd-by-webpack',
-        //     'compile-umd-by-rollup'
-        // )
     )
 );

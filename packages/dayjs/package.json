@@ -1,11 +1,11 @@
 {
-  "name": "dayjs-test",
+  "name": "@dayjs/test",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "gulp compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "pnpm clean && gulp compile",
+    "clean": "rimraf dist plugin locale index.d.ts"
   },
   "keywords": [],
   "author": "",
