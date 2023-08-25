@@ -30,7 +30,7 @@ const tsDefaultReporter = ts.reporter.defaultReporter();
 const dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const esDir = path.resolve(dirname, 'es');
-const cjsDir = path.resolve(dirname, 'lib');
+const cjsDir = path.resolve(dirname, 'cjs');
 
 function compile(modules) {
     const isES = modules !== false;
