@@ -11,7 +11,6 @@ import rollupStream from '@rollup/stream';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import terserRollup from '@rollup/plugin-terser';
 import babelRollup from '@rollup/plugin-babel';
-import postcssRollup from 'rollup-plugin-postcss';
 import commonjs from '@rollup/plugin-commonjs';
 import source from 'vinyl-source-stream';
 
@@ -65,44 +64,17 @@ gulp.task('compile-umd-by-webpack', () => {
                                                     },
                                                 },
                                             ],
-                                            '@babel/preset-typescript',
-                                            '@babel/preset-react',
                                         ],
                                     },
                                 },
                             },
-                            {
-                                test: /\.(png|svg|jpg|gif|jpeg)$/,
-                                type: 'asset/inline',
-                            },
-                            {
-                                test: /\.css$/i,
-                                use: ['style-loader', 'css-loader'],
-                            },
                         ],
                     },
-                    externals: [
-                        {
-                            react: {
-                                commonjs: 'react',
-                                commonjs2: 'react',
-                                amd: 'react',
-                                root: 'React',
-                            },
-                            'react-dom': {
-                                commonjs: 'react-dom',
-                                commonjs2: 'react-dom',
-                                amd: 'react-dom',
-                                root: 'ReactDOM',
-                            },
-                        },
-                    ],
                 },
                 webpack
             )
-        ).pipe(
-            gulp.dest('dist')
-        );
+        )
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('compile-umd-by-rollup', () => {
@@ -136,19 +108,14 @@ gulp.task('compile-umd-by-rollup', () => {
                             },
                         },
                     ],
-                    '@babel/preset-typescript',
-                    '@babel/preset-react',
                 ],
                 exclude: 'node_modules/**',
-                extensions: ['js', 'tsx', 'ts', 'jsx'],
+                extensions: ['js', 'json'],
             }),
-            postcssRollup(),
         ],
     })
         .pipe(source('dayjs.rollup.js'))
-        .pipe(
-            gulp.dest('dist')
-        );
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('compile-plugin-with-locale', () => {
